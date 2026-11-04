@@ -1,0 +1,34 @@
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+*.log
+
+# Java & Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Node & Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Docker
+docker/data/
+

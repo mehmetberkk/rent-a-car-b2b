@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: identity-auth
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/auth/**
+
+        - id: identity-agency
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/agencies/**
+          filters:
+            - JwtAuthFilter
+
+        - id: fleet-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/vehicles/**
+          filters:
+            - JwtAuthFilter
+
+        - id: pool-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/pool/**
+          filters:
+            - JwtAuthFilter
+
+jwt:
+  secret: "${JWT_SECRET:rentacar-secret-key-32-chars-minimum-length-key!}"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  tracing:
+    sampling:
+      probability: 1.0
+

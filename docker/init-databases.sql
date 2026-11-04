@@ -1,0 +1,4 @@
+CREATE DATABASE identity_db;
+CREATE DATABASE fleet_db;
+CREATE DATABASE pool_db;
+
