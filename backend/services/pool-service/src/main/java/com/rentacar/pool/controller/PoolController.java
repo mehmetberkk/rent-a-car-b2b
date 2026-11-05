@@ -50,12 +50,15 @@ public class PoolController {
                 PageRequest.of(page, size, Sort.by("listedAt").descending())
         );
 
-        PageResponse<PoolListingDto> pageResponse = PageResponse.of(
-                result.getContent(),
-                result.getNumber(),
-                result.getSize(),
-                result.getTotalElements()
-        );
+        PageResponse<PoolListingDto> pageResponse = PageResponse.<PoolListingDto>builder()
+                .content(result.getContent())
+                .page(result.getNumber())
+                .size(result.getSize())
+                .totalElements(result.getTotalElements())
+                .totalPages(result.getTotalPages())
+                .first(result.isFirst())
+                .last(result.isLast())
+                .build();
 
         return ResponseEntity.ok(ApiResponse.success(pageResponse));
     }

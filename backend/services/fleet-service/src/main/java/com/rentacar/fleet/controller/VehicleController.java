@@ -50,12 +50,15 @@ public class VehicleController {
                 PageRequest.of(page, size, Sort.by("createdAt").descending())
         );
 
-        PageResponse<VehicleDto> pageResponse = PageResponse.of(
-                vehiclePage.getContent(),
-                vehiclePage.getNumber(),
-                vehiclePage.getSize(),
-                vehiclePage.getTotalElements()
-        );
+        PageResponse<VehicleDto> pageResponse = PageResponse.<VehicleDto>builder()
+                .content(vehiclePage.getContent())
+                .page(vehiclePage.getNumber())
+                .size(vehiclePage.getSize())
+                .totalElements(vehiclePage.getTotalElements())
+                .totalPages(vehiclePage.getTotalPages())
+                .first(vehiclePage.isFirst())
+                .last(vehiclePage.isLast())
+                .build();
         return ResponseEntity.ok(ApiResponse.success(pageResponse));
     }
 

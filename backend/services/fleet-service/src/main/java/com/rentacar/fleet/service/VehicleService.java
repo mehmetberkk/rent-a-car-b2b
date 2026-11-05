@@ -102,22 +102,23 @@ public class VehicleService {
         vehicle.setTransmission(request.getTransmission());
         vehicle.setDailyPoolPrice(request.getDailyPoolPrice());
 
+        final Vehicle targetVehicle = vehicle;
         VehicleInspection inspection = inspectionRepository.findByVehicleId(vehicleId)
-                .orElseGet(() -> VehicleInspection.builder().vehicle(vehicle).build());
+                .orElseGet(() -> VehicleInspection.builder().vehicle(targetVehicle).build());
 
         inspection.setTrafficInsuranceExpiry(request.getTrafficInsuranceExpiry());
         inspection.setCascoExpiry(request.getCascoExpiry());
         inspection.setInspectionExpiry(request.getInspectionExpiry());
         inspectionRepository.save(inspection);
-        vehicle.setInspection(inspection);
+        targetVehicle.setInspection(inspection);
 
-        vehicle = vehicleRepository.save(vehicle);
+        Vehicle savedVehicle = vehicleRepository.save(targetVehicle);
 
-        if (vehicle.getStatus() == VehicleStatus.IN_POOL) {
-            publishStatusChangedEvent(vehicle, VehicleStatus.IN_POOL, VehicleStatus.IN_POOL.name());
+        if (savedVehicle.getStatus() == VehicleStatus.IN_POOL) {
+            publishStatusChangedEvent(savedVehicle, VehicleStatus.IN_POOL, VehicleStatus.IN_POOL.name());
         }
 
-        return toDto(vehicle);
+        return toDto(savedVehicle);
     }
 
     @Transactional
